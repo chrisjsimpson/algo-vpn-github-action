@@ -1,0 +1,16 @@
+# action.yml
+name: 'Deploy Algo Wiregaurd VPN Github Action'
+description: 'Deploy Algo VPN to an existing server/vps'
+inputs:
+  ssh-private-key:
+    description: 'Private ssh key. The public key must be present in ~/.ssh/authorized_keys on the target server'
+    required: true
+  public-ip:
+    description: 'Public IP address of the target server'
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.ssh-private-key }}
+    - ${{ inputs.public-ip }}
