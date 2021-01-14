@@ -22,13 +22,14 @@ mkdir -p ~/.ssh
 eval `ssh-agent -s`
 ssh-add - <<< "$SSH_PRIVATE_KEY"
 ssh-keyscan -v $PUBLIC_IP >> ~/.ssh/known_hosts
-ssh root@$PUBLIC_IP -C "apt-get update"
-ssh root@$PUBLIC_IP -C "sudo apt install -y --no-install-recommends python3-virtualenv unzip"
-ssh root@$PUBLIC_IP -C "curl -L -o algo.zip https://github.com/trailofbits/algo/archive/master.zip"
-ssh root@$PUBLIC_IP -C "unzip algo.zip"
-ssh root@$PUBLIC_IP -C 'cd algo-master; python3 -m virtualenv --python="$(command -v python3)" .env && source .env/bin/activate && python3 -m pip install -U pip virtualenv && python3 -m pip install -r requirements.txt'
+#  -o StrictHostKeyChecking=no is needed since an instance rebuild changes the HostKey
+ssh -o StrictHostKeyChecking=no root@$PUBLIC_IP -C "apt-get update"
+ssh -o StrictHostKeyChecking=no root@$PUBLIC_IP -C "sudo apt install -y --no-install-recommends python3-virtualenv unzip"
+ssh -o StrictHostKeyChecking=no root@$PUBLIC_IP -C "curl -L -o algo.zip https://github.com/trailofbits/algo/archive/master.zip"
+ssh -o StrictHostKeyChecking=no root@$PUBLIC_IP -C "unzip algo.zip"
+ssh -o StrictHostKeyChecking=no root@$PUBLIC_IP -C 'cd algo-master; python3 -m virtualenv --python="$(command -v python3)" .env && source .env/bin/activate && python3 -m pip install -U pip virtualenv && python3 -m pip install -r requirements.txt'
 # Copy over algo config
 sed -i.bak "s/<public-ip-change-me>/$PUBLIC_IP/g" config.cfg
-scp config.cfg root@$PUBLIC_IP:/root/algo-master/config.cfg
+scp -o StrictHostKeyChecking=no config.cfg root@$PUBLIC_IP:/root/algo-master/config.cfg
 # Start the algo install (which runs the algo playbook), -tt needed to force tty allocation
-ssh -tt root@$PUBLIC_IP -C "cd algo-master; source .env/bin/activate; ./algo -vvv"
+ssh -tt -o StrictHostKeyChecking=no root@$PUBLIC_IP -C "cd algo-master; source .env/bin/activate; ./algo -vvv"
