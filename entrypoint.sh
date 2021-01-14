@@ -24,7 +24,7 @@ ssh-add - <<< "$SSH_PRIVATE_KEY"
 ssh-keyscan -v $PUBLIC_IP >> ~/.ssh/known_hosts
 #  -o StrictHostKeyChecking=no is needed since an instance rebuild changes the HostKey
 ssh -o StrictHostKeyChecking=no root@$PUBLIC_IP -C "apt-get update"
-ssh -o StrictHostKeyChecking=no root@$PUBLIC_IP -C "sudo apt install -y --no-install-recommends python3-virtualenv unzip"
+ssh -o StrictHostKeyChecking=no root@$PUBLIC_IP -C "sudo apt-get install -y --no-install-recommends python3-virtualenv unzip"
 ssh -o StrictHostKeyChecking=no root@$PUBLIC_IP -C "curl -L -o algo.zip https://github.com/trailofbits/algo/archive/master.zip"
 ssh -o StrictHostKeyChecking=no root@$PUBLIC_IP -C "unzip algo.zip"
 ssh -o StrictHostKeyChecking=no root@$PUBLIC_IP -C 'cd algo-master; python3 -m virtualenv --python="$(command -v python3)" .env && source .env/bin/activate && python3 -m pip install -U pip virtualenv && python3 -m pip install -r requirements.txt'
