@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    "git-tag",
+    "all-contributors",
+    "first-time-contributor",
+    "released"
+  ],  
+  "owner": "chrisjsimpson",
+  "repo": "algo-vpn-github-action",
+  "name": "chrisjsimpson",
+}
